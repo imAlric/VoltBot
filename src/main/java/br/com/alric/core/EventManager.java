@@ -1,5 +1,6 @@
-package br.com.alric.events;
+package br.com.alric.core;
 
+import br.com.alric.events.OnGuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;

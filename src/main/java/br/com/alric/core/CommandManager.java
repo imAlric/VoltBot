@@ -1,7 +1,7 @@
 package br.com.alric.core;
 
 import br.com.alric.model.ISlashCommand;
-import br.com.alric.model.SlashCommandList;
+import br.com.alric.model.SlashCommandType;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
@@ -26,7 +26,9 @@ public class CommandManager extends ListenerAdapter {
             try {
                 Constructor<? extends ISlashCommand> o = s.slashCommand.getConstructor();
                 ISlashCommand c = o.newInstance();
-                l.add(Commands.slash(s.name().toLowerCase(), c.getDescription()));
+                CommandData d = Commands.slash(s.name().toLowerCase(), c.getDescription());
+                if(s.type == SlashCommandType.GUILD_ONLY) d.setGuildOnly(true);
+                l.add(d);
             } catch (Exception e) {
                 logger.error("Houve um problema ao salvar o comando: "+s.name().toLowerCase()+" à lista de SlashCommands", e);
             }
@@ -61,6 +63,9 @@ public class CommandManager extends ListenerAdapter {
                 event.getGuild().deleteCommandById(c.getIdLong()).queue();
             }
         }
+        for(CommandData c : getCommandList()){
+            if(c.isGuildOnly()) event.getGuild().upsertCommand(c).queue();
+        }
     }
 
     @Override
@@ -71,7 +76,7 @@ public class CommandManager extends ListenerAdapter {
             }
         }
         for(CommandData c : getCommandList()){
-            event.getJDA().upsertCommand(c).queue();
+            if(!c.isGuildOnly()) event.getJDA().upsertCommand(c).queue();
         }
     }
 }

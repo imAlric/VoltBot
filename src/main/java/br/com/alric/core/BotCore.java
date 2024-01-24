@@ -1,6 +1,5 @@
 package br.com.alric.core;
 
-import br.com.alric.events.EventManager;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
