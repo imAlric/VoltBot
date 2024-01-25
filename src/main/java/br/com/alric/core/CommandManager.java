@@ -1,5 +1,6 @@
 package br.com.alric.core;
 
+import br.com.alric.model.CommandCategory;
 import br.com.alric.model.ISlashCommand;
 import br.com.alric.model.SlashCommandType;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
@@ -9,6 +10,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +28,13 @@ public class CommandManager extends ListenerAdapter {
             try {
                 Constructor<? extends ISlashCommand> o = s.slashCommand.getConstructor();
                 ISlashCommand c = o.newInstance();
-                CommandData d = Commands.slash(s.name().toLowerCase(), c.getDescription());
-                if(s.type == SlashCommandType.GUILD_ONLY) d.setGuildOnly(true);
+                SlashCommandData d = Commands.slash(
+                    s.name().toLowerCase(),
+                    (s.category != CommandCategory.NONE ? "[ "+s.category.exhibitionName+" ] " : "")+c.getDescription()
+                );
+                if(c.getOptions() != null && !c.getOptions().isEmpty()) d.addOptions(c.getOptions());
+                if(c.getDefaultPermissions() != null) d.setDefaultPermissions(c.getDefaultPermissions());
+                if(c.getType() == SlashCommandType.GUILD_ONLY) d.setGuildOnly(true);
                 l.add(d);
             } catch (Exception e) {
                 logger.error("Houve um problema ao salvar o comando: "+s.name().toLowerCase()+" à lista de SlashCommands", e);

@@ -17,7 +17,7 @@ public class BotCore {
         String token = dotenv.get("TOKEN");
         DefaultShardManagerBuilder
         .createDefault(token)
-        .setActivity(Activity.customStatus("✨ Estou nascendo!"))
+        .setActivity(Activity.customStatus("Tente /comida"))
         .setStatus(OnlineStatus.ONLINE)
         .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES)
         .setMemberCachePolicy(MemberCachePolicy.ALL)

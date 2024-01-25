@@ -1,16 +1,18 @@
 package br.com.alric.core;
 
-import br.com.alric.commands.ComidaCommand;
-import br.com.alric.commands.SobreCommand;
+import br.com.alric.commands.*;
+import br.com.alric.model.CommandCategory;
 import br.com.alric.model.ISlashCommand;
-import br.com.alric.model.SlashCommandType;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum SlashCommandList {
-    SOBRE(SobreCommand.class, SlashCommandType.GLOBAL),
-    COMIDA(ComidaCommand.class, SlashCommandType.GLOBAL);
+    PING(PingCommand.class, CommandCategory.SYSTEM),
+    SOBRE(SobreCommand.class, CommandCategory.NONE),
+    COMIDA(ComidaCommand.class, CommandCategory.FUN),
+    KICK(KickCommand.class, CommandCategory.MODERATION),
+    BAN(BanCommand.class, CommandCategory.MODERATION);
 
     public final Class<? extends ISlashCommand> slashCommand;
-    public final SlashCommandType type;
+    public final CommandCategory category;
 }
